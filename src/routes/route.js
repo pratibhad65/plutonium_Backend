@@ -30,7 +30,45 @@ router.get("/movies/:indexNumber", function(req, res){
     res.send(requiredMovie)
 })
 
+
+router.get("/shoes", function(req, res){
+    let queryParams = req.query
+    let brand = queryParams.brand
+    res.send("dummy response")
+})
+
+// uses query params
+router.get('/candidates', function(req, res){
+    console.log('Query paramters for this request are '+JSON.stringify(req.query))
+    let gender = req.query.gender
+    let state = req.query.state
+    let district = req.query.district
+    console.log('State is '+state)
+    console.log('Gender is '+gender)
+    console.log('District is '+district)
+    let candidates = ['Akash','Suman']
+    res.send(candidates)
+})
+
 router.get("/films", function(req, res){
+    const films = [ {
+        "id": 1,
+        "name": "The Shining"
+       }, {
+     "id": 2,
+        "name": "Incendies"
+        }, {
+        "id": 3,
+         "name": "Rang de Basanti"
+        }, {
+         "id": 4,
+        "name": "Finding Nemo"
+       }
+]
+       //send all the films
+      res.send(films) 
+})
+router.get("/films/:filmId", function(req, res){
     const films = [ {
         "id": 1,
         "name": "The Shining"
@@ -44,21 +82,138 @@ router.get("/films", function(req, res){
         "id": 4,
         "name": "Finding Nemo"
        }]
-       //send all the films
-      res.send(films) 
-})
-//iterate all the films
+
+       let filmId = req.params.filmId
+
+       //iterate all the films
        //search for a film whose id matches with the id recevied in request
        for(let i = 0; i < films.length; i++){
-        let film = films[i]
-        if(film.id == filmId) {
-            //if there is a match return the response from here
-            return res.send(film)
-        }
-    }
+           let film = films[i]
+           if(film.id == filmId) {
+               //if there is a match return the response from here
+               return res.send(film)
+           }
+       }
 
-    //if there is no match give an error response
-    res.send("The film id doesn't match any movie")
+       //if there is no match give an error response
+       res.send("The film id doesn't match any movie")
+})
+
+    
+
+    
+
+router.get("/solution1", function (req, res) {
+    //logic : sum of numbers is n(n+1)/2..so get sum of all numbers in array. now take sum of numbers till last digit in the array
+    let arr= [1,2,3,5,6,7]
+  
+    let total = 0;
+    for (var i in arr) {
+        total += arr[i];
+    }
+  
+    let lastDigit= arr.pop()
+    let consecutiveSum= lastDigit * (lastDigit+1) / 2
+    let missingNumber= consecutiveSum - total
+  
+    res.send(  { data: missingNumber  }  );
+  });
+  
+  
+  
+
+  // 10/8/2022 assignmnet Post/API
+  let players =
+   [
+       {
+           "name": "manish",
+           "dob": "1/1/1995",
+           "gender": "male",
+           "city": "jalandhar",
+           "sports": [
+               "swimming"
+           ]
+       },
+       {
+           "name": "gopal",
+           "dob": "1/09/1995",
+           "gender": "male",
+           "city": "delhi",
+           "sports": [
+               "soccer"
+           ]
+       },
+       {
+           "name": "lokesh",
+           "dob": "1/1/1990",
+           "gender": "male",
+           "city": "mumbai",
+           "sports": [
+               "soccer"
+           ]
+       },
+   ]
+
+
+
+  
+  
+    // -write an api which gives the missing number in an array of integers starting from anywhere….e.g [33, 34, 35, 37, 38]: 36 is missing
+  router.get("/solution2", function (req, res) {
+    //logic : sum of n consecutive numbers is [ n * (first + last) / 2  ]..so get sum of all numbers in array. now take sum of n consecutive numbers.. n would be length+1 as 1 number is missing
+    let arr= [33, 34, 35, 37, 38]
+    let abc= arr.length
+  
+    let total = 0;
+    for (var i in arr) {
+        total += arr[i];
+    }
+  
+    let firstDigit= arr[0]
+    let lastDigit= arr.pop()
+    let consecutiveSum= (abc + 1) * (firstDigit+ lastDigit ) / 2
+    let missingNumber= consecutiveSum - total
+   
+    res.send(  { data: missingNumber  }  );
+  });
+  
+ 
+    
+
+
+    router.post('/players', function (req, res) {
+    
+        let newPlayer = req.body
+        let newPlayersName = newPlayer.name
+        let isNameRepeated = false
+    
+        //let player = players.find(p => p.name == newPlayersName)
+    
+        for(let i = 0; i < players.length; i++) {
+            if(players[i].name == newPlayersName) {
+                isNameRepeated = true;
+                break;
+            }
+        }
+    
+        //undefined is same as false/ a falsy value
+        if (isNameRepeated) {
+            //Player exists
+            res.send("This player was already added!")
+        } else {
+            //New entry
+            players.push(newPlayer)
+            res.send(players)
+        }
+    });
+    
+    
+    
+
+
+
+
+
 
 
 module.exports = router;
