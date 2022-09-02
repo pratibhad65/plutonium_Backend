@@ -36,11 +36,11 @@ let getDistricts = async function (req, res) {
         console.log(err)
         res.status(500).send({ msg: err.message })
     }
-}
+}                                                                    
 
 let getByPin = async function (req, res) {
     try {
-        let pin = req.query.pincode
+        let pin = req.query.pincode             
         let date = req.query.date
         console.log(`query params are: ${pin} ${date}`)
         var options = {
@@ -75,6 +75,7 @@ let getOtp = async function (req, res) {
     catch (err) {
         console.log(err)
         res.status(500).send({ msg: err.message })
+        
     }
 }
 
